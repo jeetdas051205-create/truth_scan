@@ -1,0 +1,50 @@
+[
+  {
+    "algorithm": "Logistic Regression",
+    "accuracy": 98.48,
+    "precision": 98.96,
+    "recall": 97.98,
+    "f1_score": 98.47,
+    "train_time": "0.52s"
+  },
+  {
+    "algorithm": "Multinomial Naive Bayes",
+    "accuracy": 95.18,
+    "precision": 95.19,
+    "recall": 95.16,
+    "f1_score": 95.18,
+    "train_time": "0.036s"
+  },
+  {
+    "algorithm": "Passive Aggressive Classifier",
+    "accuracy": 98.7,
+    "precision": 99.11,
+    "recall": 98.27,
+    "f1_score": 98.69,
+    "train_time": "0.32s"
+  },
+  {
+    "algorithm": "Support Vector Machine (LinearSVC)",
+    "accuracy": 98.81,
+    "precision": 98.97,
+    "recall": 98.65,
+    "f1_score": 98.81,
+    "train_time": "1.772s"
+  },
+  {
+    "algorithm": "Random Forest Classifier",
+    "accuracy": 96.48,
+    "precision": 98.68,
+    "recall": 94.22,
+    "f1_score": 96.4,
+    "train_time": "5.275s"
+  },
+  {
+    "algorithm": "Bidirectional LSTM (Deep Learning)",
+    "accuracy": 98.81,
+    "precision": 98.75,
+    "recall": 98.87,
+    "f1_score": 98.81,
+    "train_time": "412.5s"
+  }
+]

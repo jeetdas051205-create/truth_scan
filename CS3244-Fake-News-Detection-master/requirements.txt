@@ -1,0 +1,14 @@
+Flask
+gensim
+ipykernel
+matplotlib
+nltk
+numpy
+pandas
+Pillow
+scikit-learn
+seaborn
+tensorflow
+torch
+transformers
+wordcloud

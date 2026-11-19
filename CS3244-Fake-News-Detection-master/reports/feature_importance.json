@@ -1,0 +1,206 @@
+{
+  "fake_indicators": [
+    {
+      "word": "read",
+      "weight": 6.9247
+    },
+    {
+      "word": "image",
+      "weight": 6.56
+    },
+    {
+      "word": "featured image",
+      "weight": 6.4344
+    },
+    {
+      "word": "featured",
+      "weight": 6.4032
+    },
+    {
+      "word": "just",
+      "weight": 5.9259
+    },
+    {
+      "word": "president trump",
+      "weight": 5.1342
+    },
+    {
+      "word": "gop",
+      "weight": 5.1221
+    },
+    {
+      "word": "obama",
+      "weight": 4.5239
+    },
+    {
+      "word": "watch",
+      "weight": 4.5038
+    },
+    {
+      "word": "getty",
+      "weight": 4.3505
+    },
+    {
+      "word": "america",
+      "weight": 4.2973
+    },
+    {
+      "word": "sen",
+      "weight": 4.26
+    },
+    {
+      "word": "getty images",
+      "weight": 4.1389
+    },
+    {
+      "word": "president obama",
+      "weight": 4.0243
+    },
+    {
+      "word": "com",
+      "weight": 4.0134
+    },
+    {
+      "word": "mr",
+      "weight": 3.9306
+    },
+    {
+      "word": "hillary",
+      "weight": 3.726
+    },
+    {
+      "word": "rep",
+      "weight": 3.7069
+    },
+    {
+      "word": "like",
+      "weight": 3.5548
+    },
+    {
+      "word": "images",
+      "weight": 3.5449
+    },
+    {
+      "word": "video",
+      "weight": 3.4881
+    },
+    {
+      "word": "wire",
+      "weight": 3.4398
+    },
+    {
+      "word": "twitter com",
+      "weight": 3.3587
+    },
+    {
+      "word": "didn",
+      "weight": 3.3423
+    },
+    {
+      "word": "pic",
+      "weight": 3.332
+    }
+  ],
+  "real_indicators": [
+    {
+      "word": "said",
+      "weight": 13.0553
+    },
+    {
+      "word": "president donald",
+      "weight": 6.6991
+    },
+    {
+      "word": "wednesday",
+      "weight": 5.5869
+    },
+    {
+      "word": "tuesday",
+      "weight": 5.501
+    },
+    {
+      "word": "thursday",
+      "weight": 5.0664
+    },
+    {
+      "word": "friday",
+      "weight": 4.2725
+    },
+    {
+      "word": "republican",
+      "weight": 4.2209
+    },
+    {
+      "word": "nov",
+      "weight": 4.1264
+    },
+    {
+      "word": "monday",
+      "weight": 4.004
+    },
+    {
+      "word": "said statement",
+      "weight": 3.7166
+    },
+    {
+      "word": "minister",
+      "weight": 3.5411
+    },
+    {
+      "word": "president barack",
+      "weight": 3.5012
+    },
+    {
+      "word": "bit ly",
+      "weight": 3.2435
+    },
+    {
+      "word": "spokesman",
+      "weight": 3.1622
+    },
+    {
+      "word": "presidential",
+      "weight": 3.1443
+    },
+    {
+      "word": "democratic",
+      "weight": 3.123
+    },
+    {
+      "word": "ly",
+      "weight": 3.0519
+    },
+    {
+      "word": "reporters",
+      "weight": 2.9735
+    },
+    {
+      "word": "told",
+      "weight": 2.9299
+    },
+    {
+      "word": "representatives",
+      "weight": 2.758
+    },
+    {
+      "word": "house representatives",
+      "weight": 2.7402
+    },
+    {
+      "word": "told reporters",
+      "weight": 2.7365
+    },
+    {
+      "word": "percent",
+      "weight": 2.7045
+    },
+    {
+      "word": "comment",
+      "weight": 2.6926
+    },
+    {
+      "word": "said thursday",
+      "weight": 2.6853
+    }
+  ]
+}

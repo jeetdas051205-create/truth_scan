@@ -1,0 +1,23 @@
+{
+  "dataset_name": "ISOT Fake News Dataset (University of Victoria)",
+  "total_records": 34103,
+  "real_count": 17056,
+  "fake_count": 17047,
+  "train_records": 27282,
+  "test_records": 6821,
+  "vocabulary_size": 10000,
+  "classes": [
+    "Real News (0)",
+    "Fake News (1)"
+  ],
+  "class_balance_percentage": {
+    "real": 50.01,
+    "fake": 49.99
+  },
+  "secondary_benchmark": {
+    "dataset_name": "FakeNewsNet (PolitiFact & GossipCop)",
+    "total_records": 23196,
+    "politifact": 1056,
+    "gossipcop": 22140
+  }
+}

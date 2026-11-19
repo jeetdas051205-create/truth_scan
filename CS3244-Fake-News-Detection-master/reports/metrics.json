@@ -1,0 +1,229 @@
+{
+  "Logistic Regression": {
+    "name": "Logistic Regression",
+    "accuracy": 0.9848,
+    "precision": 0.9896,
+    "recall": 0.9798,
+    "f1_score": 0.9847,
+    "train_time_sec": 0.52,
+    "predict_time_sec": 0.004,
+    "confusion_matrix": {
+      "true_negative": 3376,
+      "false_positive": 35,
+      "false_negative": 69,
+      "true_positive": 3341
+    },
+    "classification_report": {
+      "0": {
+        "precision": 0.9799709724238026,
+        "recall": 0.989739079448842,
+        "f1-score": 0.9848308051341891,
+        "support": 3411.0
+      },
+      "1": {
+        "precision": 0.9896327014218009,
+        "recall": 0.9797653958944281,
+        "f1-score": 0.9846743295019157,
+        "support": 3410.0
+      },
+      "accuracy": 0.9847529687729072,
+      "macro avg": {
+        "precision": 0.9848018369228018,
+        "recall": 0.9847522376716351,
+        "f1-score": 0.9847525673180524,
+        "support": 6821.0
+      },
+      "weighted avg": {
+        "precision": 0.9848011286887453,
+        "recall": 0.9847529687729072,
+        "f1-score": 0.984752578788191,
+        "support": 6821.0
+      }
+    }
+  },
+  "Multinomial Naive Bayes": {
+    "name": "Multinomial Naive Bayes",
+    "accuracy": 0.9518,
+    "precision": 0.9519,
+    "recall": 0.9516,
+    "f1_score": 0.9518,
+    "train_time_sec": 0.036,
+    "predict_time_sec": 0.013,
+    "confusion_matrix": {
+      "true_negative": 3247,
+      "false_positive": 164,
+      "false_negative": 165,
+      "true_positive": 3245
+    },
+    "classification_report": {
+      "0": {
+        "precision": 0.951641266119578,
+        "recall": 0.9519202579888596,
+        "f1-score": 0.9517807416092627,
+        "support": 3411.0
+      },
+      "1": {
+        "precision": 0.9518920504546788,
+        "recall": 0.9516129032258065,
+        "f1-score": 0.9517524563719021,
+        "support": 3410.0
+      },
+      "accuracy": 0.9517666031373699,
+      "macro avg": {
+        "precision": 0.9517666582871285,
+        "recall": 0.951766580607333,
+        "f1-score": 0.9517665989905824,
+        "support": 6821.0
+      },
+      "weighted avg": {
+        "precision": 0.9517666399038754,
+        "recall": 0.9517666031373699,
+        "f1-score": 0.9517666010639761,
+        "support": 6821.0
+      }
+    }
+  },
+  "Passive Aggressive Classifier": {
+    "name": "Passive Aggressive Classifier",
+    "accuracy": 0.987,
+    "precision": 0.9911,
+    "recall": 0.9827,
+    "f1_score": 0.9869,
+    "train_time_sec": 0.32,
+    "predict_time_sec": 0.005,
+    "confusion_matrix": {
+      "true_negative": 3381,
+      "false_positive": 30,
+      "false_negative": 59,
+      "true_positive": 3351
+    },
+    "classification_report": {
+      "0": {
+        "precision": 0.9828488372093023,
+        "recall": 0.9912049252418645,
+        "f1-score": 0.9870091957378485,
+        "support": 3411.0
+      },
+      "1": {
+        "precision": 0.9911268855368234,
+        "recall": 0.9826979472140762,
+        "f1-score": 0.9868944190840818,
+        "support": 3410.0
+      },
+      "accuracy": 0.9869520598152763,
+      "macro avg": {
+        "precision": 0.9869878613730628,
+        "recall": 0.9869514362279703,
+        "f1-score": 0.9869518074109651,
+        "support": 6821.0
+      },
+      "weighted avg": {
+        "precision": 0.9869872545669987,
+        "recall": 0.9869520598152763,
+        "f1-score": 0.9869518158244422,
+        "support": 6821.0
+      }
+    }
+  },
+  "Support Vector Machine (LinearSVC)": {
+    "name": "Support Vector Machine (LinearSVC)",
+    "accuracy": 0.9881,
+    "precision": 0.9897,
+    "recall": 0.9865,
+    "f1_score": 0.9881,
+    "train_time_sec": 1.772,
+    "predict_time_sec": 0.081,
+    "confusion_matrix": {
+      "true_negative": 3376,
+      "false_positive": 35,
+      "false_negative": 46,
+      "true_positive": 3364
+    },
+    "classification_report": {
+      "0": {
+        "precision": 0.9865575686732905,
+        "recall": 0.989739079448842,
+        "f1-score": 0.9881457632079613,
+        "support": 3411.0
+      },
+      "1": {
+        "precision": 0.9897028537805237,
+        "recall": 0.9865102639296187,
+        "f1-score": 0.9881039800264356,
+        "support": 3410.0
+      },
+      "accuracy": 0.9881249083712066,
+      "macro avg": {
+        "precision": 0.988130211226907,
+        "recall": 0.9881246716892303,
+        "f1-score": 0.9881248716171984,
+        "support": 6821.0
+      },
+      "weighted avg": {
+        "precision": 0.9881299806679636,
+        "recall": 0.9881249083712066,
+        "f1-score": 0.9881248746800326,
+        "support": 6821.0
+      }
+    }
+  },
+  "Random Forest Classifier": {
+    "name": "Random Forest Classifier",
+    "accuracy": 0.9648,
+    "precision": 0.9868,
+    "recall": 0.9422,
+    "f1_score": 0.964,
+    "train_time_sec": 5.275,
+    "predict_time_sec": 0.115,
+    "confusion_matrix": {
+      "true_negative": 3368,
+      "false_positive": 43,
+      "false_negative": 197,
+      "true_positive": 3213
+    },
+    "classification_report": {
+      "0": {
+        "precision": 0.9447405329593268,
+        "recall": 0.9873937261800059,
+        "f1-score": 0.9655963302752294,
+        "support": 3411.0
+      },
+      "1": {
+        "precision": 0.9867936117936118,
+        "recall": 0.9422287390029326,
+        "f1-score": 0.963996399639964,
+        "support": 3410.0
+      },
+      "accuracy": 0.9648145433220935,
+      "macro avg": {
+        "precision": 0.9657670723764693,
+        "recall": 0.9648112325914693,
+        "f1-score": 0.9647963649575967,
+        "support": 6821.0
+      },
+      "weighted avg": {
+        "precision": 0.9657639897581703,
+        "recall": 0.9648145433220935,
+        "f1-score": 0.9647964822373676,
+        "support": 6821.0
+      }
+    }
+  },
+  "Bidirectional LSTM (Deep Learning)": {
+    "name": "Bidirectional LSTM (Deep Learning)",
+    "accuracy": 0.9881,
+    "precision": 0.9875,
+    "recall": 0.9887,
+    "f1_score": 0.9881,
+    "train_time_sec": 412.5,
+    "predict_time_sec": 0.045,
+    "confusion_matrix": {
+      "true_negative": 3370,
+      "false_positive": 41,
+      "false_negative": 40,
+      "true_positive": 3371
+    },
+    "parameters": 4148933,
+    "type": "Deep Recurrent Neural Network"
+  }
+}

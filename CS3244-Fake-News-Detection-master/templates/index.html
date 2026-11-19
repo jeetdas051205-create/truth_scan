@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TruthScan AI — AI-Powered Fake News Detection System</title>
+  <meta name="description" content="Production-Quality AI/ML Fake News Detection Web Application. Separate Facts From Fiction with calibrated machine learning & deep learning models.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            surface: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              800: '#0f172a',
+              900: '#020617',
+              card: '#0f172a',
+              cardLight: '#ffffff'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & Chart.js -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Three.js 3D Visualizer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* Custom Scrollbar & Animations */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0b0f19; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-light {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .gradient-border {
+      position: relative;
+    }
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(to right, #4f46e5, #06b6d4);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .pulse-glow-real {
+      box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.35);
+    }
+    .pulse-glow-fake {
+      box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-[#020617] text-slate-100 antialiased font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 border-b border-slate-800/80 bg-[#020617]/85 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#landing" onclick="navigateTo('landing')" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+          <div class="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-5 h-5 text-indigo-400"></i>
+          </div>
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-300 bg-clip-text text-transparent">TRUTHSCAN <span class="text-indigo-400">AI</span></span>
+          <span class="block text-[10px] uppercase font-mono tracking-wider text-slate-400 -mt-1">CapStone ML Project</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Items -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
+        <button onclick="navigateTo('landing')" id="nav-landing" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-all flex items-center gap-1.5">
+          <i data-lucide="home" class="w-4 h-4"></i> Overview
+        </button>
+        <button onclick="navigateTo('studio')" id="nav-studio" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 transition-all flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i> Detection Studio
+        </button>
+        <button onclick="navigateTo('dashboard')" id="nav-dashboard" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-all flex items-center gap-1.5">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Analytics
+        </button>
+        <button onclick="navigateTo('performance')" id="nav-performance" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-all flex items-center gap-1.5">
+          <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Benchmarks
+        </button>
+        <button onclick="navigateTo('howitworks')" id="nav-howitworks" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-all flex items-center gap-1.5">
+          <i data-lucide="git-branch" class="w-4 h-4"></i> Architecture
+        </button>
+        <button onclick="navigateTo('about')" id="nav-about" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-all flex items-center gap-1.5">
+          <i data-lucide="info" class="w-4 h-4"></i> Project Report
+        </button>
+      </nav>
+
+      <!-- Action Button & Status Pill -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs font-mono text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>Engine Online (98.81% Acc)</span>
+        </div>
+        <button onclick="navigateTo('studio')" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs sm:text-sm font-semibold rounded-lg shadow-md shadow-indigo-600/30 transition-all transform active:scale-95 flex items-center gap-1.5">
+          <span>Test Article</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+        <!-- Mobile menu toggle button -->
+        <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-400 hover:text-white">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden border-b border-slate-800 bg-slate-950 px-4 pt-2 pb-4 space-y-1">
+      <button onclick="navigateTo('landing'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Overview</button>
+      <button onclick="navigateTo('studio'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-indigo-400 bg-slate-900">Detection Studio</button>
+      <button onclick="navigateTo('dashboard'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Analytics Dashboard</button>
+      <button onclick="navigateTo('performance'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Model Performance</button>
+      <button onclick="navigateTo('howitworks'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">How It Works</button>
+      <button onclick="navigateTo('about'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800">Academic Project Report</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER (MULTI-PAGE SPA) -->
+  <main class="flex-1">
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 1: LANDING PAGE -->
+    <!-- ========================================================================= -->
+    <section id="page-landing" class="page-view">
+      <!-- Hero Section -->
+      <div class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28">
+        <!-- Background decorative gradients -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-600/20 via-cyan-500/15 to-transparent blur-[120px] pointer-events-none -z-10"></div>
+        
+        <div class="max-w-5xl mx-auto px-4 text-center">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-700/80 text-xs text-slate-300 font-medium mb-6 shadow-inner">
+            <span class="flex h-2 w-2 rounded-full bg-cyan-400"></span>
+            <span>B.Tech CSE (AI & ML) Capstone Project</span>
+            <span class="text-slate-500">|</span>
+            <span class="text-indigo-400">NUS CS3244 Benchmark</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+            Can You Trust <br class="hidden sm:inline" />
+            <span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-indigo-300 bg-clip-text text-transparent">What You Read?</span>
+          </h1>
+
+          <p class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+            <strong class="text-slate-200">Separate Facts From Fiction.</strong> TruthScan AI leverages state-of-the-art Natural Language Processing and Machine Learning to detect misinformation, fabrications, and biased journalistic reporting with 98.8% accuracy.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center gap-4">
+            <button onclick="navigateTo('studio')" class="px-7 py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-indigo-600 hover:from-indigo-500 hover:to-indigo-400 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2">
+              <i data-lucide="search" class="w-5 h-5"></i>
+              <span>Launch Detection Studio</span>
+            </button>
+            <button onclick="navigateTo('dashboard')" class="px-7 py-3.5 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold rounded-xl border border-slate-700 transition-all flex items-center gap-2">
+              <i data-lucide="line-chart" class="w-5 h-5 text-cyan-400"></i>
+              <span>Explore Analytics</span>
+            </button>
+          </div>
+
+          <!-- Quick Metrics Bar -->
+          <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="text-2xl sm:text-3xl font-bold text-white font-mono">34,103</div>
+              <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Trained Articles</div>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="text-2xl sm:text-3xl font-bold text-emerald-400 font-mono">98.81%</div>
+              <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Model Accuracy</div>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="text-2xl sm:text-3xl font-bold text-cyan-400 font-mono">6 Models</div>
+              <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">ML & DL Stack</div>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="text-2xl sm:text-3xl font-bold text-indigo-400 font-mono">&lt; 25 ms</div>
+              <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Inference Latency</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Interactive Animated Truth Mesh Section -->
+      <div class="max-w-4xl mx-auto px-4 mb-12">
+        <div class="relative overflow-hidden rounded-3xl border border-indigo-500/30 bg-slate-950/80 shadow-2xl backdrop-blur-xl">
+          <div id="three-hero-container" class="relative w-full h-[280px] sm:h-[350px] flex items-center justify-center">
+            <canvas id="three-canvas" class="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+            
+            <!-- Floating Cyber Overlay Labels -->
+            <div class="absolute top-4 left-4 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-700/60 backdrop-blur-md text-xs font-mono text-cyan-400">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+              <span>3D Neural Credibility Mesh &bull; Real-Time</span>
+            </div>
+            <div class="absolute bottom-4 right-4 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-700/60 backdrop-blur-md text-[11px] font-mono text-slate-400">
+              <i data-lucide="mouse-pointer" class="w-3.5 h-3.5 text-indigo-400"></i>
+              <span>Move mouse cursor to tilt 3D field</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Interactive Quick-Demo Box -->
+      <div class="max-w-4xl mx-auto px-4 mb-20">
+        <div class="glass-card rounded-2xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl relative">
+          <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+              <span class="ml-2 text-xs font-mono text-slate-400">interactive-preview.py</span>
+            </div>
+            <span class="text-xs text-indigo-400 font-medium">Instant Live Test</span>
+          </div>
+
+          <div class="space-y-4">
+            <p class="text-sm text-slate-300 font-medium">Click a verified sample below to observe live linguistic classification:</p>
+            <div class="flex flex-wrap gap-2.5">
+              <button onclick="loadSampleToHero('real_election')" class="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-medium border border-emerald-500/20 transition-all flex items-center gap-1.5">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Load Real: 2024 Presidential Election
+              </button>
+              <button onclick="loadSampleToHero('real_sc')" class="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-medium border border-emerald-500/20 transition-all flex items-center gap-1.5">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Load Real: Supreme Court Ruling
+              </button>
+              <button onclick="loadSampleToHero('fake')" class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-medium border border-rose-500/20 transition-all flex items-center gap-1.5">
+                <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Load Fake: Conspiracy Hoax
+              </button>
+            </div>
+
+            <textarea id="hero-demo-input" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 font-mono resize-none" placeholder="Or enter any news headline or snippet here..."></textarea>
+
+            <div class="flex items-center justify-between">
+              <div id="hero-demo-result" class="text-xs font-mono text-slate-400">
+                Ready for analysis.
+              </div>
+              <button onclick="runHeroDemo()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all">
+                <span>Evaluate</span>
+                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Supported ML Algorithms Grid -->
+      <div class="max-w-6xl mx-auto px-4 py-12 border-t border-slate-800">
+        <div class="text-center mb-12">
+          <h2 class="text-xs uppercase tracking-widest font-mono text-indigo-400 font-semibold mb-2">Multi-Model Engine</h2>
+          <p class="text-2xl sm:text-3xl font-bold text-white">Algorithms Implemented & Benchmarked</p>
+          <p class="text-sm text-slate-400 max-w-xl mx-auto mt-2">Every algorithm was rigorously evaluated on the identical 80/20 stratified split of the ISOT dataset.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-indigo-500/40 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-4">
+              <i data-lucide="zap" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Linear Support Vector Machine</h3>
+            <p class="text-xs font-mono text-emerald-400 mb-2">98.81% Test Accuracy | 98.81% F1</p>
+            <p class="text-xs text-slate-400 leading-relaxed">Convex hyper-plane optimization with CalibratedClassifierCV sigmoid probability estimation for high-dimensional sparse TF-IDF spaces.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-indigo-500/40 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-4">
+              <i data-lucide="layers" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Bidirectional LSTM</h3>
+            <p class="text-xs font-mono text-emerald-400 mb-2">98.81% Test Accuracy | 4.14M Params</p>
+            <p class="text-xs text-slate-400 leading-relaxed">Deep sequence model with 128-dim word embeddings, forward and backward LSTM recurrent passes, dropout regularization, and dense classification layers.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-indigo-500/40 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-4">
+              <i data-lucide="fast-forward" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Passive Aggressive Classifier</h3>
+            <p class="text-xs font-mono text-emerald-400 mb-2">98.70% Test Accuracy | 98.69% F1</p>
+            <p class="text-xs text-slate-400 leading-relaxed">Online margin-based linear algorithm ideally suited for continuous streaming text updates, adapting aggressively when encountering misclassifications.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-indigo-500/40 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
+              <i data-lucide="activity" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Logistic Regression</h3>
+            <p class="text-xs font-mono text-emerald-400 mb-2">98.48% Test Accuracy | 98.47% F1</p>
+            <p class="text-xs text-slate-400 leading-relaxed">L2-regularized maximum-likelihood model with balanced class weight distribution providing interpretable linear log-odds coefficients.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-indigo-500/40 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 mb-4">
+              <i data-lucide="network" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Random Forest Classifier</h3>
+            <p class="text-xs font-mono text-emerald-400 mb-2">96.48% Test Accuracy | 100 Trees</p>
+            <p class="text-xs text-slate-400 leading-relaxed">Ensemble bagging of orthogonal decision trees aggregating vote distributions over randomized subsets of TF-IDF feature indicators.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-indigo-500/40 transition-all">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-400 mb-4">
+              <i data-lucide="pie-chart" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Multinomial Naive Bayes</h3>
+            <p class="text-xs font-mono text-emerald-400 mb-2">95.18% Test Accuracy | Alpha=0.1</p>
+            <p class="text-xs text-slate-400 leading-relaxed">Generative probabilistic model modeling word counts with Laplace smoothing, providing a classical information retrieval baseline.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 2: DETECTION STUDIO -->
+    <!-- ========================================================================= -->
+    <section id="page-studio" class="page-view hidden py-8">
+      <div class="max-w-6xl mx-auto px-4">
+        
+        <!-- Header -->
+        <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-7 h-7 text-indigo-400"></i>
+              Detection Studio
+            </h1>
+            <p class="text-sm text-slate-400 mt-1">Submit full-text news articles to verify credibility against trained models in real-time.</p>
+          </div>
+
+          <!-- Model Selector Dropdown -->
+          <div class="flex items-center gap-2">
+            <label for="model-selector" class="text-xs text-slate-400 font-medium">Model:</label>
+            <select id="model-selector" class="bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 font-medium">
+              {% for m in models %}
+              <option value="{{ m }}" {% if m == default_model %}selected{% endif %}>{{ m }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- LEFT COLUMN: MULTI-MODE INPUT SECTION (7 cols) -->
+          <div class="lg:col-span-7 flex flex-col space-y-4">
+            
+            <!-- Studio Tab Switcher -->
+            <div class="flex items-center gap-1.5 p-1 bg-slate-900/90 border border-slate-800 rounded-xl">
+              <button id="studio-tab-text" onclick="switchStudioTab('text')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-md">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Text Scanner
+              </button>
+              <button id="studio-tab-url" onclick="switchStudioTab('url')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800/80">
+                <i data-lucide="globe" class="w-3.5 h-3.5 text-cyan-400"></i> Live URL Scanner
+              </button>
+              <button id="studio-tab-ai" onclick="switchStudioTab('ai')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800/80">
+                <i data-lucide="cpu" class="w-3.5 h-3.5 text-purple-400"></i> AI Text Detector
+              </button>
+            </div>
+
+            <!-- PANEL 1: ARTICLE TEXT SCANNER -->
+            <div id="panel-text" class="flex flex-col space-y-4 flex-1">
+              <div class="glass-card rounded-2xl p-5 border border-slate-800 shadow-xl flex flex-col flex-1">
+                <div class="flex flex-wrap items-center justify-between pb-3 border-b border-slate-800/80 mb-3 gap-2">
+                  <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="file-text" class="w-3.5 h-3.5 text-indigo-400"></i> Paste Article Content
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    <button onclick="pasteClipboard()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-md transition-colors flex items-center gap-1">
+                      <i data-lucide="clipboard" class="w-3.5 h-3.5"></i> Paste
+                    </button>
+                    <button onclick="clearText()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-md transition-colors flex items-center gap-1">
+                      <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear
+                    </button>
+                  </div>
+                </div>
+
+                <div class="relative flex-1 min-h-[240px]">
+                  <textarea id="news-input" class="w-full h-full min-h-[240px] bg-slate-950/70 border border-slate-800/80 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/80 font-normal leading-relaxed placeholder:text-slate-600 resize-y" placeholder="Paste full news article, editorial text, or headline here to evaluate credibility and AI-generated likelihood..."></textarea>
+                </div>
+
+                <div class="pt-3 mt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs border-t border-slate-800/80">
+                  <div class="flex items-center gap-4 text-slate-400 font-mono">
+                    <span>Chars: <strong id="char-count" class="text-slate-200">0</strong></span>
+                    <span>Words: <strong id="word-count" class="text-slate-200">0</strong></span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-slate-500 text-[11px]">Load Test:</span>
+                    <button onclick="fillSample('real_election')" class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-medium transition-colors">Real: 2024 Election</button>
+                    <button onclick="fillSample('real_sc')" class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-medium transition-colors">Real: Supreme Court</button>
+                    <button onclick="fillSample('real_nasa')" class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-medium transition-colors">Real: NASA Space</button>
+                    <button onclick="fillSample('fake')" class="px-2 py-1 rounded bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 font-medium transition-colors">Fake: Hoax</button>
+                  </div>
+                </div>
+              </div>
+
+              <button id="btn-analyze" onclick="analyzeNews()" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-indigo-600 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 text-base">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+                <span>Analyze Article With AI</span>
+              </button>
+            </div>
+
+            <!-- PANEL 2: LIVE WEB URL SCANNER -->
+            <div id="panel-url" class="hidden flex-col space-y-4 flex-1">
+              <div class="glass-card rounded-2xl p-5 border border-slate-800 shadow-xl space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                  <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-cyan-400"></i> Live Article URL
+                  </span>
+                  <span class="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">Automated Content Scraper</span>
+                </div>
+
+                <div class="space-y-2">
+                  <label for="url-input" class="text-xs text-slate-400">Paste any news link to fetch and inspect in real-time:</label>
+                  <div class="relative">
+                    <input id="url-input" type="url" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-500 font-mono" placeholder="https://www.bbc.com/news/..., https://reuters.com/..., https://thehindu.com/..." />
+                  </div>
+                </div>
+
+                <div class="pt-2 flex flex-wrap items-center justify-between gap-2 text-xs border-t border-slate-800/80">
+                  <span class="text-slate-500 text-[11px]">Quick Test Links:</span>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="fillUrlSample('bbc')" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white font-medium transition-colors">BBC World</button>
+                    <button onclick="fillUrlSample('reuters')" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white font-medium transition-colors">Reuters Wire</button>
+                    <button onclick="fillUrlSample('nasa')" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white font-medium transition-colors">NASA Discovery</button>
+                    <button onclick="fillUrlSample('thehindu')" class="px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white font-medium transition-colors">The Hindu</button>
+                  </div>
+                </div>
+              </div>
+
+              <button id="btn-analyze-url" onclick="verifyUrl()" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 via-indigo-600 to-indigo-700 hover:from-cyan-500 hover:to-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-cyan-600/20 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 text-base">
+                <i data-lucide="globe" class="w-5 h-5"></i>
+                <span>Fetch & Verify Live Article Link</span>
+              </button>
+            </div>
+
+            <!-- PANEL 3: AI-GENERATED CONTENT CHECKER -->
+            <div id="panel-ai" class="hidden flex-col space-y-4 flex-1">
+              <div class="glass-card rounded-2xl p-5 border border-slate-800 shadow-xl space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                  <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="cpu" class="w-3.5 h-3.5 text-purple-400"></i> AI vs Human Authenticity Checker
+                  </span>
+                  <span class="text-[11px] font-mono text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">Burstiness & Perplexity Analysis</span>
+                </div>
+
+                <div class="relative min-h-[220px]">
+                  <textarea id="ai-text-input" class="w-full h-full min-h-[220px] bg-slate-950/70 border border-slate-800/80 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:border-purple-500/80 font-normal leading-relaxed placeholder:text-slate-600 resize-y" placeholder="Paste article text or snippet here to inspect whether it was written by a human journalist or generated by ChatGPT / Claude / LLM..."></textarea>
+                </div>
+
+                <div class="pt-2 flex flex-wrap items-center justify-between gap-2 text-xs border-t border-slate-800/80">
+                  <span class="text-slate-500 text-[11px]">Load Test Samples:</span>
+                  <div class="flex items-center gap-2">
+                    <button onclick="fillAiSample('human')" class="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-medium transition-colors">Human Journalism</button>
+                    <button onclick="fillAiSample('ai')" class="px-2.5 py-1 rounded bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 font-medium transition-colors">ChatGPT Generated</button>
+                  </div>
+                </div>
+              </div>
+
+              <button id="btn-analyze-ai" onclick="verifyAiOnly()" class="w-full py-3.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 hover:from-purple-500 hover:to-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-purple-600/20 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 text-base">
+                <i data-lucide="cpu" class="w-5 h-5"></i>
+                <span>Detect AI vs Human Authenticity</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: RESULTS & EXPLAINABILITY (5 cols) -->
+          <div class="lg:col-span-5 flex flex-col">
+            
+            <!-- Default / Empty State -->
+            <div id="result-empty-state" class="glass-card rounded-2xl p-8 border border-slate-800 flex-1 flex flex-col items-center justify-center text-center">
+              <div class="w-16 h-16 rounded-2xl bg-slate-800/50 border border-slate-700/50 flex items-center justify-center text-slate-500 mb-4">
+                <i data-lucide="scan" class="w-8 h-8"></i>
+              </div>
+              <h3 class="text-base font-semibold text-slate-200">No Analysis Yet</h3>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">Enter a news article and click "Analyze Article With AI" to inspect the calibrated verdict.</p>
+            </div>
+
+            <!-- Loading Spinner State -->
+            <div id="result-loading-state" class="glass-card rounded-2xl p-8 border border-slate-800 flex-1 hidden flex-col items-center justify-center text-center">
+              <div class="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
+              <p class="text-sm font-semibold text-slate-200">Processing Linguistic Embeddings...</p>
+              <p class="text-xs text-slate-400 font-mono mt-1">Tokenizing & Vectorizing 10,000 TF-IDF features</p>
+            </div>
+
+            <!-- Populated Results Card -->
+            <div id="result-card" class="glass-card rounded-2xl p-6 border border-slate-800 flex-1 hidden flex-col">
+              
+              <!-- Verdict Badge Header -->
+              <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Verification Report</span>
+                <span id="res-latency" class="text-xs font-mono text-slate-400 flex items-center gap-1">
+                  <i data-lucide="clock" class="w-3.5 h-3.5"></i> 14.2 ms
+                </span>
+              </div>
+
+              <!-- Scraped Article Details (Appears only for URL Scans) -->
+              <div id="res-scraped-box" class="hidden mt-3 p-3.5 rounded-xl bg-slate-900/80 border border-cyan-500/30 text-xs space-y-1.5">
+                <div class="flex items-center justify-between text-slate-400">
+                  <span class="font-mono text-cyan-400 flex items-center gap-1 font-semibold text-xs">
+                    <i data-lucide="globe" class="w-3.5 h-3.5"></i> <span id="res-scraped-domain">reuters.com</span>
+                  </span>
+                  <span id="res-scraped-readtime" class="text-[11px] font-mono text-slate-400">2 min read</span>
+                </div>
+                <div id="res-scraped-title" class="font-bold text-white text-sm leading-snug">Article Title</div>
+                <div id="res-scraped-excerpt" class="text-slate-400 text-[11px] line-clamp-2">Article excerpt...</div>
+              </div>
+
+              <!-- Main Result Banner -->
+              <div id="res-banner" class="my-4 p-5 rounded-xl border flex items-center justify-between transition-all">
+                <div class="flex items-center gap-3.5">
+                  <div id="res-icon-wrap" class="w-12 h-12 rounded-xl flex items-center justify-center">
+                    <i id="res-icon" data-lucide="check-circle" class="w-6 h-6"></i>
+                  </div>
+                  <div>
+                    <div id="res-label" class="text-2xl font-extrabold tracking-wide">REAL NEWS</div>
+                    <div class="text-xs font-medium opacity-80" id="res-sublabel">Authentic Journalistic Standard</div>
+                  </div>
+                </div>
+
+                <!-- Confidence Gauge -->
+                <div class="text-right font-mono">
+                  <div id="res-confidence" class="text-2xl font-bold">98.5%</div>
+                  <div class="text-[10px] uppercase tracking-wider opacity-75">Confidence</div>
+                </div>
+              </div>
+
+              <!-- AI Authenticity & Stylometric Meter -->
+              <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 mb-4 space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-slate-400 font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="cpu" class="w-3.5 h-3.5 text-purple-400"></i> AI vs Human Authenticity
+                  </span>
+                  <span id="res-ai-verdict" class="font-mono font-bold text-xs text-purple-400">Authentic Human</span>
+                </div>
+                <!-- Dual Progress Bar -->
+                <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden flex">
+                  <div id="bar-human" class="bg-emerald-500 transition-all duration-500" style="width: 75%"></div>
+                  <div id="bar-ai" class="bg-purple-500 transition-all duration-500" style="width: 25%"></div>
+                </div>
+                <div class="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                  <span>Human: <strong id="res-human-pct" class="text-emerald-400">75%</strong></span>
+                  <span>AI / LLM: <strong id="res-ai-pct" class="text-purple-400">25%</strong></span>
+                </div>
+                <!-- Detected AI Markers or Attributions -->
+                <div id="res-ai-chips" class="flex flex-wrap gap-1 pt-1"></div>
+              </div>
+
+              <!-- Model & Wordcount info -->
+              <div class="grid grid-cols-2 gap-2 mb-4 text-xs">
+                <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                  <span class="text-slate-500 block">Classifier Model:</span>
+                  <span id="res-model-used" class="font-semibold text-slate-200 font-mono text-[11px]">LinearSVC</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+                  <span class="text-slate-500 block">Article Length:</span>
+                  <span id="res-wordcount" class="font-semibold text-slate-200 font-mono text-[11px]">142 Words</span>
+                </div>
+              </div>
+
+              <!-- Explanation Paragraph -->
+              <div class="p-3.5 rounded-xl bg-slate-900/40 border border-slate-800 mb-4">
+                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                  <i data-lucide="brain" class="w-3.5 h-3.5 text-indigo-400"></i> Model Reasoning
+                </div>
+                <p id="res-explanation" class="text-xs text-slate-300 leading-relaxed font-normal">
+                  The article exhibits neutral syntax and verified attribution markers.
+                </p>
+              </div>
+
+              <!-- Influential Keywords Chips -->
+              <div class="mb-4">
+                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                  <i data-lucide="tag" class="w-3.5 h-3.5 text-cyan-400"></i> Key Linguistic Signals
+                </div>
+                <div id="res-keywords" class="flex flex-wrap gap-1.5">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Academic Disclaimer Box -->
+              <div class="mt-auto pt-3 border-t border-slate-800/80 text-[11px] text-slate-500 flex items-start gap-2 leading-relaxed">
+                <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
+                <span><strong>Disclaimer:</strong> This automated classification reflects linguistic and stylistic training distributions. Always verify critical breaking news through primary, authoritative journalism.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 3: ANALYTICS DASHBOARD -->
+    <!-- ========================================================================= -->
+    <section id="page-dashboard" class="page-view hidden py-8">
+      <div class="max-w-6xl mx-auto px-4">
+        
+        <div class="mb-6">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
+            <i data-lucide="layout-dashboard" class="w-7 h-7 text-cyan-400"></i>
+            Analytics Dashboard
+          </h1>
+          <p class="text-sm text-slate-400 mt-1">Real-time statistics extracted from the 34,103 ISOT news articles and test evaluation runs.</p>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">Total Articles</span>
+              <i data-lucide="database" class="w-4 h-4 text-indigo-400"></i>
+            </div>
+            <div class="text-3xl font-extrabold text-white font-mono">34,103</div>
+            <div class="text-xs text-slate-500 mt-1">Deduplicated Corpus (ISOT)</div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">Real vs Fake Ratio</span>
+              <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-400"></i>
+            </div>
+            <div class="text-3xl font-extrabold text-white font-mono">50.0% / 50.0%</div>
+            <div class="text-xs text-slate-500 mt-1">17,056 Real / 17,047 Fake</div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">Peak Test Accuracy</span>
+              <i data-lucide="award" class="w-4 h-4 text-cyan-400"></i>
+            </div>
+            <div class="text-3xl font-extrabold text-emerald-400 font-mono">98.81%</div>
+            <div class="text-xs text-slate-500 mt-1">LinearSVC & Bi-LSTM</div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-900/70 border border-slate-800">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">Test Set Size</span>
+              <i data-lucide="split" class="w-4 h-4 text-purple-400"></i>
+            </div>
+            <div class="text-3xl font-extrabold text-white font-mono">6,821</div>
+            <div class="text-xs text-slate-500 mt-1">20% Stratified Holdout</div>
+          </div>
+        </div>
+
+        <!-- Charts Row 1: Model Comparison & Dataset Balance -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+          <div class="lg:col-span-8 glass-card rounded-2xl p-6 border border-slate-800">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-1">Model Accuracy & F1-Score Benchmark</h3>
+            <p class="text-xs text-slate-400 mb-4">Evaluated across all 6 algorithms on the holdout test dataset.</p>
+            <div class="h-[300px]">
+              <canvas id="chart-model-benchmark"></canvas>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 glass-card rounded-2xl p-6 border border-slate-800">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-1">Dataset Class Distribution</h3>
+            <p class="text-xs text-slate-400 mb-4">Balanced distribution prevents model majority-class bias.</p>
+            <div class="h-[220px] flex items-center justify-center">
+              <canvas id="chart-class-distribution"></canvas>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 flex justify-around text-center">
+              <div><strong class="text-emerald-400 block font-mono">17,056</strong> Real News</div>
+              <div><strong class="text-rose-400 block font-mono">17,047</strong> Fake News</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row 2: Confusion Matrix & Latency -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-6 glass-card rounded-2xl p-6 border border-slate-800">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-1">Confusion Matrix (LinearSVC Best Model)</h3>
+            <p class="text-xs text-slate-400 mb-4">Performance on 6,821 test samples (True Negatives, False Positives, etc.)</p>
+            
+            <div class="grid grid-cols-2 gap-3 font-mono text-center my-4">
+              <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                <span class="text-xs text-emerald-400 block mb-1">True Real (TN)</span>
+                <span class="text-2xl font-bold text-emerald-300">3,376</span>
+                <span class="text-[10px] text-slate-400 block mt-1">98.97% Specificity</span>
+              </div>
+              <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30">
+                <span class="text-xs text-rose-400 block mb-1">False Fake (FP)</span>
+                <span class="text-2xl font-bold text-rose-300">35</span>
+                <span class="text-[10px] text-slate-400 block mt-1">Type I Error</span>
+              </div>
+              <div class="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30">
+                <span class="text-xs text-rose-400 block mb-1">False Real (FN)</span>
+                <span class="text-2xl font-bold text-rose-300">46</span>
+                <span class="text-[10px] text-slate-400 block mt-1">Type II Error</span>
+              </div>
+              <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                <span class="text-xs text-emerald-400 block mb-1">True Fake (TP)</span>
+                <span class="text-2xl font-bold text-emerald-300">3,364</span>
+                <span class="text-[10px] text-slate-400 block mt-1">98.65% Sensitivity</span>
+              </div>
+            </div>
+            <div class="text-[11px] text-slate-400 text-center">
+              Total Test Accuracy: <strong class="text-emerald-400">98.81%</strong> | Overall Error Rate: <strong class="text-rose-400">1.19%</strong>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 glass-card rounded-2xl p-6 border border-slate-800">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-1">Secondary Benchmark (FakeNewsNet)</h3>
+            <p class="text-xs text-slate-400 mb-4">Cross-domain verification on PolitiFact & GossipCop datasets.</p>
+            
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300 font-medium">PolitiFact Dataset</span>
+                  <span class="font-mono text-indigo-400">1,056 Articles</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-indigo-500 h-full rounded-full" style="width: 71.48%"></div>
+                </div>
+                <span class="text-[11px] text-slate-500 mt-0.5 block">Cross-Domain Benchmark: 71.48% Accuracy</span>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300 font-medium">GossipCop Dataset</span>
+                  <span class="font-mono text-cyan-400">22,140 Articles</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-cyan-500 h-full rounded-full" style="width: 69.76%"></div>
+                </div>
+                <span class="text-[11px] text-slate-500 mt-0.5 block">Celebrity Misinformation: 69.76% Accuracy</span>
+              </div>
+
+              <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-400 leading-relaxed">
+                <strong class="text-slate-300">Observation:</strong> Domain shift between political journalism (ISOT) and celebrity social media posts (FakeNewsNet) highlights the importance of vocabulary diversity and contextual sentiment tuning.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 4: MODEL PERFORMANCE BENCHMARKS -->
+    <!-- ========================================================================= -->
+    <section id="page-performance" class="page-view hidden py-8">
+      <div class="max-w-6xl mx-auto px-4">
+        
+        <div class="mb-6">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
+            <i data-lucide="bar-chart-2" class="w-7 h-7 text-indigo-400"></i>
+            Model Performance Benchmarks
+          </h1>
+          <p class="text-sm text-slate-400 mt-1">Detailed comparative breakdown of all machine learning and deep learning algorithms.</p>
+        </div>
+
+        <!-- Comparative Table Card -->
+        <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden shadow-xl mb-8">
+          <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Evaluation Metrics (ISOT Holdout 20%)</h3>
+            <span class="text-xs font-mono text-emerald-400">N=6,821 Test Samples</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-slate-900/80 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
+                <tr>
+                  <th class="py-3.5 px-6 font-semibold">Algorithm</th>
+                  <th class="py-3.5 px-4 font-semibold text-right">Accuracy</th>
+                  <th class="py-3.5 px-4 font-semibold text-right">Precision</th>
+                  <th class="py-3.5 px-4 font-semibold text-right">Recall</th>
+                  <th class="py-3.5 px-4 font-semibold text-right">F1-Score</th>
+                  <th class="py-3.5 px-4 font-semibold text-right">Latency</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 font-mono">
+                {% for row in model_comparison %}
+                <tr class="hover:bg-slate-900/40 transition-colors">
+                  <td class="py-3.5 px-6 font-sans font-medium text-slate-200 flex items-center gap-2">
+                    {% if "LinearSVC" in row.algorithm or "LSTM" in row.algorithm %}
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    {% else %}
+                    <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+                    {% endif %}
+                    {{ row.algorithm }}
+                  </td>
+                  <td class="py-3.5 px-4 text-right font-bold text-emerald-400">{{ row.accuracy }}%</td>
+                  <td class="py-3.5 px-4 text-right text-slate-300">{{ row.precision }}%</td>
+                  <td class="py-3.5 px-4 text-right text-slate-300">{{ row.recall }}%</td>
+                  <td class="py-3.5 px-4 text-right font-bold text-indigo-400">{{ row.f1_score }}%</td>
+                  <td class="py-3.5 px-4 text-right text-slate-400 text-xs">{{ row.train_time }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Radar & Confusion Matrix Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 glass-card rounded-2xl p-6 border border-slate-800">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-1">Multi-Metric Radar Comparison</h3>
+            <p class="text-xs text-slate-400 mb-4">Visualizing the balance across Precision, Recall, and Accuracy.</p>
+            <div class="h-[320px]">
+              <canvas id="chart-radar-benchmark"></canvas>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-1">Key Scientific Takeaways</h3>
+              <p class="text-xs text-slate-400 mb-4">Observations for college presentation defense:</p>
+              
+              <ul class="space-y-3 text-xs text-slate-300 leading-relaxed">
+                <li class="flex items-start gap-2">
+                  <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                  <span><strong>LinearSVC & Bi-LSTM:</strong> Achieved equivalent top test accuracy (98.81%), showing both linear boundary optimization and sequential embeddings capture truth signals effectively.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                  <span><strong>Passive Aggressive Classifier:</strong> Extremely fast training (~0.18s) with high precision (99.11%), making it ideal for high-throughput live news wire APIs.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                  <span><strong>Explainability Advantage:</strong> TF-IDF linear weights expose specific deceptive tokens (e.g., sensationalist adjectives) directly to end users.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mt-6 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-300">
+              <strong class="text-white block mb-0.5">Recommended Deployment:</strong>
+              Use <strong>Support Vector Machine (LinearSVC)</strong> for ultra-low latency API responses (&lt;25ms) with high explainability, complemented by <strong>Bi-LSTM</strong> for deep contextual validation.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 5: ABOUT PROJECT & ACADEMIC REPORT -->
+    <!-- ========================================================================= -->
+    <section id="page-about" class="page-view hidden py-8">
+      <div class="max-w-4xl mx-auto px-4">
+        
+        <div class="mb-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-400 font-mono mb-2">
+            Final B.Tech CSE (AI & ML) Capstone Presentation
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-white">TruthScan AI: Academic Project Report</h1>
+          <p class="text-sm text-slate-400 mt-2">Comprehensive documentation of problem statement, architecture, methodology, and empirical findings.</p>
+        </div>
+
+        <div class="space-y-8 text-sm text-slate-300 leading-relaxed">
+          
+          <!-- Section 1 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800">
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">1</span>
+              Problem Statement & Motivation
+            </h2>
+            <p>
+              The digital era has witnessed an unprecedented proliferation of disinformation, fake news, and coordinated propaganda campaigns across social networks and news syndicates. Misinformation impairs democratic processes, creates public health crises, and induces financial market volatility.
+            </p>
+            <p class="mt-2">
+              Manual fact-checking by human journalists cannot scale to millions of articles published daily. This capstone project introduces <strong>TruthScan AI</strong>: an automated, scalable machine learning and deep learning architecture that analyzes linguistic syntax, stylistic markers, and lexical distribution to detect misinformation with 98.8% accuracy.
+            </p>
+          </div>
+
+          <!-- Section 2 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800">
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">2</span>
+              Proposed System vs Existing Systems
+            </h2>
+            <div class="overflow-x-auto mt-3">
+              <table class="w-full text-xs">
+                <thead class="bg-slate-900 text-slate-400 font-mono">
+                  <tr>
+                    <th class="p-3 text-left">Feature</th>
+                    <th class="p-3 text-left">Existing Academic Systems</th>
+                    <th class="p-3 text-left text-indigo-400">TruthScan AI (Proposed)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800">
+                  <tr>
+                    <td class="p-3 font-semibold text-slate-200">Algorithms</td>
+                    <td class="p-3 text-slate-400">Single model (e.g. Naive Bayes)</td>
+                    <td class="p-3 text-emerald-400 font-medium">6 Ensembled (LinearSVC, Bi-LSTM, PAC, RF, LR, MNB)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold text-slate-200">Probability Calibration</td>
+                    <td class="p-3 text-slate-400">Uncalibrated raw scores</td>
+                    <td class="p-3 text-emerald-400 font-medium">CalibratedClassifierCV Sigmoid Probabilities</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold text-slate-200">Explainability</td>
+                    <td class="p-3 text-slate-400">Black-box label output</td>
+                    <td class="p-3 text-emerald-400 font-medium">Influential n-gram attribution extraction</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold text-slate-200">Interface</td>
+                    <td class="p-3 text-slate-400">CLI / Notebook only</td>
+                    <td class="p-3 text-emerald-400 font-medium">Interactive SaaS SPA + REST API</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 3 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800">
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">3</span>
+              Methodology & Pipeline
+            </h2>
+            <ol class="list-decimal list-inside space-y-2 text-xs text-slate-300">
+              <li><strong>Corpus Assembly:</strong> Ingestion of the 34,103 ISOT dataset articles and 23,196 FakeNewsNet articles.</li>
+              <li><strong>Text Preprocessing:</strong> Regex sanitation removing URLs, HTML fragments, source tags, non-alphanumeric noise, and lowercasing.</li>
+              <li><strong>Stratified Partitioning:</strong> 80% train (27,282 articles) and 20% test (6,821 articles) maintaining exact 50/50 balance without data leakage.</li>
+              <li><strong>TF-IDF Vectorization:</strong> Unigram + bigram feature generation with sublinear term frequency scaling capped at 10,000 features.</li>
+              <li><strong>Model Benchmarking:</strong> Training and cross-evaluating 5 classical ML models + 1 deep sequence model.</li>
+              <li><strong>Production Serialization:</strong> Persistent storage using Joblib and Keras HDF5 format with sub-25ms inference.</li>
+            </ol>
+          </div>
+
+          <!-- Section 4 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800">
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">4</span>
+              Technology Stack
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+              <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-slate-500 block">Core Language:</span>
+                <span class="font-bold text-white">Python 3.13.5</span>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-slate-500 block">Machine Learning:</span>
+                <span class="font-bold text-white">scikit-learn 1.9.1</span>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-slate-500 block">Deep Learning:</span>
+                <span class="font-bold text-white">TensorFlow / Keras 3.15</span>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-slate-500 block">Web Framework:</span>
+                <span class="font-bold text-white">Flask 3.1.3 + Jinja2</span>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-slate-500 block">Frontend Stack:</span>
+                <span class="font-bold text-white">Tailwind CSS + Chart.js</span>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                <span class="text-slate-500 block">Icons & Fonts:</span>
+                <span class="font-bold text-white">Lucide + Plus Jakarta Sans</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800">
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">5</span>
+              Limitations & Future Scope
+            </h2>
+            <p><strong>Limitations:</strong></p>
+            <ul class="list-disc list-inside text-xs space-y-1 mb-3 text-slate-400">
+              <li>Linguistic models classify textual patterns and writing styles, not real-time external ground truth facts.</li>
+              <li>Domain transfer accuracy drops on informal social media slang and memes (as evidenced in FakeNewsNet).</li>
+              <li>Multimodal misinformation (manipulated video/deepfakes) is outside the scope of text NLP.</li>
+            </ul>
+            <p><strong>Future Scope:</strong></p>
+            <ul class="list-disc list-inside text-xs space-y-1 text-slate-400">
+              <li>Integration with live Google Knowledge Graph and Wikipedia API verification.</li>
+              <li>Multimodal image-text cross-attention using CLIP or Gemini vision models.</li>
+              <li>Browser extension for automated real-time social media feed scanning.</li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- PAGE 6: HOW IT WORKS / SYSTEM ARCHITECTURE -->
+    <!-- ========================================================================= -->
+    <section id="page-howitworks" class="page-view hidden py-8">
+      <div class="max-w-5xl mx-auto px-4">
+        
+        <div class="mb-8 text-center max-w-2xl mx-auto">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center justify-center gap-2">
+            <i data-lucide="git-branch" class="w-7 h-7 text-indigo-400"></i>
+            How TruthScan AI Works
+          </h1>
+          <p class="text-sm text-slate-400 mt-2">End-to-end processing pipeline from raw article ingestion to calibrated confidence scoring.</p>
+        </div>
+
+        <!-- Workflow Diagram Steps -->
+        <div class="space-y-4 relative">
+          
+          <!-- Step 1 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0 font-mono font-bold">1</div>
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">News Article Input</h3>
+              <p class="text-xs text-slate-400">User submits article text via the Web UI or via the <code class="text-indigo-400 font-mono">POST /api/predict</code> JSON REST endpoint. Text is validated for minimum length (&gt;15 words).</p>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div class="w-0.5 h-6 bg-slate-800 mx-auto"></div>
+
+          <!-- Step 2 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-cyan-600/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 font-mono font-bold">2</div>
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">Linguistic Sanitation & Cleaning</h3>
+              <p class="text-xs text-slate-400">Regex filters eliminate HTML tags, HTTP/HTTPS links, source metadata tags, and punctuation noise. Characters are lowercased and spaces collapsed to standardize the feature space.</p>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div class="w-0.5 h-6 bg-slate-800 mx-auto"></div>
+
+          <!-- Step 3 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 font-mono font-bold">3</div>
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">TF-IDF Vectorization & Tokenization</h3>
+              <p class="text-xs text-slate-400">The pre-fitted TF-IDF vectorizer converts tokens into a 10,000-dimensional sparse matrix incorporating unigrams and bigrams with sublinear term-frequency weighting.</p>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div class="w-0.5 h-6 bg-slate-800 mx-auto"></div>
+
+          <!-- Step 4 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 font-mono font-bold">4</div>
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">Model Inference & Probability Calibration</h3>
+              <p class="text-xs text-slate-400">The selected classifier (LinearSVC, Bi-LSTM, PAC, Random Forest, etc.) executes inference. Calibrated probabilities quantify uncertainty into a defensible 0-100% confidence score.</p>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div class="w-0.5 h-6 bg-slate-800 mx-auto"></div>
+
+          <!-- Step 5 -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 font-mono font-bold">5</div>
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">Explainability & Verdict Rendering</h3>
+              <p class="text-xs text-slate-400">Top positive and negative coefficient n-grams are extracted and mapped to the article text, explaining which words triggered the verdict alongside processing latency (&lt;25ms).</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 py-8 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-300">TRUTHSCAN AI</span>
+        <span>— B.Tech CSE (AI & ML) Capstone Project</span>
+      </div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <button onclick="navigateTo('about')" class="hover:text-white transition-colors">Documentation</button>
+        <button onclick="navigateTo('performance')" class="hover:text-white transition-colors">Benchmarks</button>
+        <button onclick="navigateTo('studio')" class="hover:text-white transition-colors">Live Studio</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- CLIENT JAVASCRIPT APP LOGIC -->
+  <!-- ========================================================================= -->
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Verified Sample Articles for Demo
+    const SAMPLES = {
+      real: "Donald Trump won the 2024 presidential election defeating Kamala Harris to become the 47th President of the United States. World leaders congratulated the president-elect as transition preparations began in Washington.",
+      real_election: "Donald Trump won the 2024 presidential election defeating Kamala Harris to become the 47th President of the United States. World leaders congratulated the president-elect as transition preparations began in Washington.",
+      real_sc: "WASHINGTON — The Supreme Court heard arguments on Tuesday regarding federal regulatory power, with justices questioning attorneys on the scope of agency authority under established statutes. The case could impact environmental and economic regulations nationwide.",
+      real_nasa: "NASA James Webb Space Telescope has discovered the most distant active supermassive black hole found to date in a galaxy that formed just 570 million years after the Big Bang, astronomers reported on Thursday.",
+      real_1: "WASHINGTON — The Supreme Court heard arguments on Tuesday regarding federal regulatory power, with justices questioning attorneys on the scope of agency authority under established statutes. The case could impact environmental and economic regulations nationwide.",
+      fake: "BREAKING SHOCKING EXCLUSIVE: Secret unredacted FBI files discovered hidden in basement confirm top political leaders orchestrated fraudulent voter scheme with clandestine offshore bank accounts and alien radio frequency transmitters to manipulate national elections!",
+      fake_1: "BREAKING BOMBSHELL: Whistleblower leaks internal documents proving mainstream media executives received multi-million dollar payouts from shadowy globalist cabals to hide secret biological weapons labs and manipulate voting machines in secret underground facilities!",
+      politifact_1: "Court Orders Former President To Pay Four Hundred Million Dollars In Restitution following unprecedented judicial ruling on classified overseas bank records and unverified financial statements, triggering immediate emergency appeals."
+    };
+
+    // SPA Navigation Handler
+    function navigateTo(pageId) {
+      document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+      const targetPage = document.getElementById(`page-${pageId}`);
+      if (targetPage) {
+        targetPage.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Update Nav active styling
+      document.querySelectorAll('.nav-link').forEach(btn => {
+        btn.classList.remove('text-indigo-400', 'bg-indigo-500/10', 'border', 'border-indigo-500/20');
+        btn.classList.add('text-slate-300');
+      });
+      const activeNav = document.getElementById(`nav-${pageId}`);
+      if (activeNav) {
+        activeNav.classList.remove('text-slate-300');
+        activeNav.classList.add('text-indigo-400', 'bg-indigo-500/10', 'border', 'border-indigo-500/20');
+      }
+
+      // Re-trigger icon rendering
+      setTimeout(() => lucide.createIcons(), 50);
+
+      // Lazy load charts when navigating to dashboard/performance
+      if (pageId === 'dashboard' || pageId === 'performance') {
+        renderCharts();
+      }
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    // Studio Multi-Tab Switcher
+    function switchStudioTab(tab) {
+      const tabs = ['text', 'url', 'ai'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`studio-tab-${t}`);
+        const panel = document.getElementById(`panel-${t}`);
+        if (t === tab) {
+          btn.className = 'flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-md';
+          panel.classList.remove('hidden');
+          panel.classList.add('flex');
+        } else {
+          btn.className = 'flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800/80';
+          panel.classList.add('hidden');
+          panel.classList.remove('flex');
+        }
+      });
+      setTimeout(() => lucide.createIcons(), 30);
+    }
+
+    // URL Test Samples
+    const URL_SAMPLES = {
+      bbc: "https://www.bbc.com/news/world-us-canada-68500000",
+      reuters: "https://www.reuters.com/world/us/us-senate-passes-bipartisan-legislation-2024",
+      nasa: "https://www.nasa.gov/news-release/james-webb-telescope-discovers-distant-black-hole",
+      thehindu: "https://www.thehindu.com/news/national/rbi-monetary-policy-repo-rate-steady/article68000000.ece"
+    };
+
+    function fillUrlSample(key) {
+      const input = document.getElementById('url-input');
+      if (input && URL_SAMPLES[key]) {
+        input.value = URL_SAMPLES[key];
+      }
+    }
+
+    // AI Detector Test Samples
+    const AI_SAMPLES = {
+      human: "WASHINGTON — The Supreme Court heard arguments on Tuesday regarding federal regulatory power, with justices questioning attorneys on the scope of agency authority. The decision is expected in late June, court officials said in a statement.",
+      ai: "In the ever-evolving landscape of modern governance, judicial rulings play a crucial role. Furthermore, it is important to note that navigating the complexities of regulatory frameworks serves as a reminder of our collective democratic tapestry. In conclusion, the multifaceted approach remains pivotal at the forefront of policy."
+    };
+
+    function fillAiSample(key) {
+      const input = document.getElementById('ai-text-input');
+      if (input && AI_SAMPLES[key]) {
+        input.value = AI_SAMPLES[key];
+      }
+    }
+
+    // Word & Character Counter
+    const newsInput = document.getElementById('news-input');
+    const charCount = document.getElementById('char-count');
+    const wordCount = document.getElementById('word-count');
+
+    if (newsInput) {
+      newsInput.addEventListener('input', () => {
+        const text = newsInput.value;
+        charCount.innerText = text.length;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        wordCount.innerText = words;
+      });
+    }
+
+    function clearText() {
+      newsInput.value = '';
+      charCount.innerText = '0';
+      wordCount.innerText = '0';
+      document.getElementById('result-card').classList.add('hidden');
+      document.getElementById('result-empty-state').classList.remove('hidden');
+    }
+
+    async function pasteClipboard() {
+      try {
+        const text = await navigator.clipboard.readText();
+        newsInput.value = text;
+        newsInput.dispatchEvent(new Event('input'));
+      } catch (err) {
+        alert('Clipboard access not granted. Please paste manually using Ctrl+V.');
+      }
+    }
+
+    function fillSample(type) {
+      if (SAMPLES[type]) {
+        newsInput.value = SAMPLES[type];
+        newsInput.dispatchEvent(new Event('input'));
+      }
+    }
+
+    function loadSampleToHero(type) {
+      const el = document.getElementById('hero-demo-input');
+      if (el && SAMPLES[type]) {
+        el.value = SAMPLES[type];
+      }
+    }
+
+    // Hero Live Quick-Demo
+    async function runHeroDemo() {
+      const text = document.getElementById('hero-demo-input').value;
+      const resEl = document.getElementById('hero-demo-result');
+      if (!text || text.trim().length < 10) {
+        resEl.innerHTML = '<span class="text-rose-400">Please enter at least 1-2 sentences.</span>';
+        return;
+      }
+      resEl.innerHTML = '<span class="text-indigo-400 animate-pulse">Classifying...</span>';
+
+      try {
+        const resp = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text })
+        });
+        const data = await resp.json();
+        if (data.success) {
+          const isReal = data.prediction === 'REAL';
+          const badgeClass = isReal ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+          resEl.innerHTML = `Result: <span class="${badgeClass}">${data.prediction}</span> (${data.confidence}% confidence in ${data.latency_ms}ms)`;
+        } else {
+          resEl.innerHTML = `<span class="text-rose-400">${data.error}</span>`;
+        }
+      } catch (err) {
+        resEl.innerHTML = '<span class="text-rose-400">Server error during analysis.</span>';
+      }
+    }
+
+    // Main Studio Text Analysis Handler
+    async function analyzeNews() {
+      const text = newsInput.value;
+      const model = document.getElementById('model-selector').value;
+
+      if (!text || text.trim().length < 15) {
+        alert('Please enter or paste at least 15-20 characters of news content.');
+        return;
+      }
+
+      const emptyState = document.getElementById('result-empty-state');
+      const loadingState = document.getElementById('result-loading-state');
+      const resultCard = document.getElementById('result-card');
+
+      emptyState.classList.add('hidden');
+      resultCard.classList.add('hidden');
+      loadingState.classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text, model: model })
+        });
+        const data = await response.json();
+
+        loadingState.classList.add('hidden');
+
+        if (!data.success) {
+          alert(`Analysis Error: ${data.error}`);
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        renderPredictionResult(data);
+      } catch (error) {
+        loadingState.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        alert('Unable to reach backend server. Please verify Flask is running.');
+      }
+    }
+
+    // Live URL Verification Handler
+    async function verifyUrl() {
+      const urlInput = document.getElementById('url-input');
+      const url = urlInput ? urlInput.value.trim() : '';
+      const model = document.getElementById('model-selector').value;
+
+      if (!url || !url.startsWith('http')) {
+        alert('Please enter a valid article URL starting with http:// or https://');
+        return;
+      }
+
+      const emptyState = document.getElementById('result-empty-state');
+      const loadingState = document.getElementById('result-loading-state');
+      const resultCard = document.getElementById('result-card');
+
+      emptyState.classList.add('hidden');
+      resultCard.classList.add('hidden');
+      loadingState.classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/scrape-and-predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: url, model: model })
+        });
+        const data = await response.json();
+        loadingState.classList.add('hidden');
+
+        if (!data.success) {
+          alert(`Scraping / Verification Notice: ${data.error}`);
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        renderPredictionResult(data);
+      } catch (error) {
+        loadingState.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        alert('Unable to connect to live web scraping service.');
+      }
+    }
+
+    // AI-Only Content Detector Handler
+    async function verifyAiOnly() {
+      const aiInput = document.getElementById('ai-text-input');
+      const text = aiInput ? aiInput.value.trim() : '';
+      const model = document.getElementById('model-selector').value;
+
+      if (!text || text.length < 15) {
+        alert('Please enter or paste at least 15-20 characters of text to evaluate for AI markers.');
+        return;
+      }
+
+      const emptyState = document.getElementById('result-empty-state');
+      const loadingState = document.getElementById('result-loading-state');
+      const resultCard = document.getElementById('result-card');
+
+      emptyState.classList.add('hidden');
+      resultCard.classList.add('hidden');
+      loadingState.classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text, model: model })
+        });
+        const data = await response.json();
+        loadingState.classList.add('hidden');
+
+        if (!data.success) {
+          alert(`Analysis Error: ${data.error}`);
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        renderPredictionResult(data);
+      } catch (error) {
+        loadingState.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        alert('Unable to reach backend server.');
+      }
+    }
+
+    function renderPredictionResult(data) {
+      const resultCard = document.getElementById('result-card');
+      const banner = document.getElementById('res-banner');
+      const label = document.getElementById('res-label');
+      const sublabel = document.getElementById('res-sublabel');
+      const conf = document.getElementById('res-confidence');
+      const iconWrap = document.getElementById('res-icon-wrap');
+      const icon = document.getElementById('res-icon');
+      const latency = document.getElementById('res-latency');
+      const modelUsed = document.getElementById('res-model-used');
+      const wordCountEl = document.getElementById('res-wordcount');
+      const explanation = document.getElementById('res-explanation');
+      const keywordsContainer = document.getElementById('res-keywords');
+
+      // Scraped URL Box
+      const scrapedBox = document.getElementById('res-scraped-box');
+      if (data.scraped_details) {
+        scrapedBox.classList.remove('hidden');
+        document.getElementById('res-scraped-domain').innerText = data.scraped_details.domain || 'External Website';
+        document.getElementById('res-scraped-readtime').innerText = `${data.scraped_details.read_time_min || 1} min read`;
+        document.getElementById('res-scraped-title').innerText = data.scraped_details.title || 'Extracted Headline';
+        document.getElementById('res-scraped-excerpt').innerText = data.scraped_details.excerpt || '';
+      } else {
+        scrapedBox.classList.add('hidden');
+      }
+
+      // AI Authenticity Meter
+      if (data.ai_analysis) {
+        const aiPct = data.ai_analysis.ai_probability || 0;
+        const humanPct = data.ai_analysis.human_probability || 100;
+        document.getElementById('bar-human').style.width = `${humanPct}%`;
+        document.getElementById('bar-ai').style.width = `${aiPct}%`;
+        document.getElementById('res-human-pct').innerText = `${humanPct}%`;
+        document.getElementById('res-ai-pct').innerText = `${aiPct}%`;
+        document.getElementById('res-ai-verdict').innerText = data.ai_analysis.verdict || 'Human Authored';
+
+        const aiChips = document.getElementById('res-ai-chips');
+        aiChips.innerHTML = '';
+        if (data.ai_analysis.ai_markers_found && data.ai_analysis.ai_markers_found.length > 0) {
+          data.ai_analysis.ai_markers_found.forEach(m => {
+            const chip = document.createElement('span');
+            chip.className = 'px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 text-[10px] font-mono';
+            chip.innerText = `AI Marker: "${m}"`;
+            aiChips.appendChild(chip);
+          });
+        }
+        if (data.ai_analysis.attributions_found && data.ai_analysis.attributions_found.length > 0) {
+          data.ai_analysis.attributions_found.forEach(a => {
+            const chip = document.createElement('span');
+            chip.className = 'px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono';
+            chip.innerText = `Human Attribution: "${a}"`;
+            aiChips.appendChild(chip);
+          });
+        }
+      }
+
+      const isReal = data.prediction === 'REAL';
+
+      // Update Styling
+      if (isReal) {
+        banner.className = 'my-4 p-5 rounded-xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 pulse-glow-real';
+        iconWrap.className = 'w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center';
+        icon.setAttribute('data-lucide', 'check-circle');
+        label.innerText = 'REAL NEWS';
+        label.className = 'text-2xl font-extrabold tracking-wide text-emerald-400';
+        sublabel.innerText = 'Verified Factual Standard';
+        conf.className = 'text-2xl font-bold text-emerald-400';
+      } else {
+        banner.className = 'my-4 p-5 rounded-xl border bg-rose-500/10 border-rose-500/30 text-rose-300 pulse-glow-fake';
+        iconWrap.className = 'w-12 h-12 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center';
+        icon.setAttribute('data-lucide', 'alert-triangle');
+        label.innerText = 'FAKE NEWS';
+        label.className = 'text-2xl font-extrabold tracking-wide text-rose-400';
+        sublabel.innerText = 'Deceptive / Sensational Signal';
+        conf.className = 'text-2xl font-bold text-rose-400';
+      }
+
+      conf.innerText = `${data.confidence}%`;
+      latency.innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5"></i> ${data.latency_ms} ms`;
+      modelUsed.innerText = data.model_used;
+      wordCountEl.innerText = `${data.word_count} Words`;
+      explanation.innerText = data.explanation;
+
+      // Render Influential Keywords
+      keywordsContainer.innerHTML = '';
+      if (data.influential_words && data.influential_words.length > 0) {
+        data.influential_words.forEach(item => {
+          const chip = document.createElement('span');
+          const isFakeSig = item.type && item.type.includes('Fake');
+          chip.className = `px-2 py-0.5 rounded text-[11px] font-mono border ${isFakeSig ? 'bg-rose-500/10 border-rose-500/30 text-rose-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'}`;
+          chip.innerText = `${item.word} (${item.weight})`;
+          keywordsContainer.appendChild(chip);
+        });
+      } else {
+        keywordsContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No specific isolated keyword outliers. Natural journalistic tone verified.</span>';
+      }
+
+      resultCard.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    // Initialize Interactive 3D Three.js Holographic Truth Mesh
+    function initThreeHero() {
+      const container = document.getElementById('three-hero-container');
+      const canvas = document.getElementById('three-canvas');
+      if (!container || !canvas || typeof THREE === 'undefined') return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+      camera.position.z = 4.8;
+
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Core Geodesic Sphere (Truth Core)
+      const coreGeo = new THREE.IcosahedronGeometry(1.5, 2);
+      const coreMat = new THREE.MeshBasicMaterial({ color: 0x6366f1, wireframe: true, transparent: true, opacity: 0.65 });
+      const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+      scene.add(coreMesh);
+
+      // Inner Rotating Diamond
+      const innerGeo = new THREE.OctahedronGeometry(0.85, 1);
+      const innerMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.8 });
+      const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+      scene.add(innerMesh);
+
+      // Data Orbit Particles
+      const pCount = 380;
+      const pGeo = new THREE.BufferGeometry();
+      const pos = new Float32Array(pCount * 3);
+      const col = new Float32Array(pCount * 3);
+
+      const colCyan = new THREE.Color(0x06b6d4);
+      const colIndigo = new THREE.Color(0x818cf8);
+      const colEmerald = new THREE.Color(0x10b981);
+
+      for (let i = 0; i < pCount; i++) {
+        const radius = 1.9 + Math.random() * 1.5;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(Math.random() * 2 - 1);
+        pos[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        pos[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        pos[i * 3 + 2] = radius * Math.cos(phi);
+
+        const c = Math.random() > 0.5 ? (Math.random() > 0.5 ? colCyan : colEmerald) : colIndigo;
+        col[i * 3] = c.r;
+        col[i * 3 + 1] = c.g;
+        col[i * 3 + 2] = c.b;
+      }
+      pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      pGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+
+      const pMat = new THREE.PointsMaterial({ size: 0.045, vertexColors: true, transparent: true, opacity: 0.85 });
+      const pSystem = new THREE.Points(pGeo, pMat);
+      scene.add(pSystem);
+
+      // Rings
+      const ringGeo = new THREE.RingGeometry(2.3, 2.33, 64);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, side: THREE.DoubleSide, transparent: true, opacity: 0.35 });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = Math.PI / 3;
+      scene.add(ring);
+
+      let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+        mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+      });
+
+      container.addEventListener('mouseleave', () => { mouseX = 0; mouseY = 0; });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        targetX += (mouseX - targetX) * 0.05;
+        targetY += (mouseY - targetY) * 0.05;
+
+        coreMesh.rotation.y += 0.0035;
+        coreMesh.rotation.x += 0.0015;
+        innerMesh.rotation.y -= 0.006;
+        innerMesh.rotation.z += 0.004;
+        pSystem.rotation.y += 0.0012;
+        ring.rotation.z += 0.0025;
+
+        scene.rotation.y = targetX * 0.45;
+        scene.rotation.x = -targetY * 0.35;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        if (!container) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
+    }
+
+    // Call on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initThreeHero();
+    });
+
+    // Chart.js Visualizations
+    let chartsRendered = false;
+
+    function renderCharts() {
+      if (chartsRendered) return;
+      chartsRendered = true;
+
+      // Chart 1: Model Benchmark Bar Chart
+      const ctxBenchmark = document.getElementById('chart-model-benchmark');
+      if (ctxBenchmark) {
+        new Chart(ctxBenchmark, {
+          type: 'bar',
+          data: {
+            labels: ['LinearSVC', 'Bi-LSTM', 'Passive Agr.', 'Logistic Reg.', 'Random Forest', 'Naive Bayes'],
+            datasets: [
+              {
+                label: 'Accuracy (%)',
+                data: [98.81, 98.81, 98.70, 98.48, 96.48, 95.18],
+                backgroundColor: 'rgba(99, 102, 241, 0.85)',
+                borderRadius: 6
+              },
+              {
+                label: 'F1-Score (%)',
+                data: [98.81, 98.81, 98.69, 98.47, 96.40, 95.18],
+                backgroundColor: 'rgba(6, 182, 212, 0.85)',
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                min: 90,
+                max: 100,
+                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono' } }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 } }
+              }
+            },
+            plugins: {
+              legend: { labels: { color: '#cbd5e1', font: { family: 'Plus Jakarta Sans' } } }
+            }
+          }
+        });
+      }
+
+      // Chart 2: Dataset Distribution Doughnut
+      const ctxDist = document.getElementById('chart-class-distribution');
+      if (ctxDist) {
+        new Chart(ctxDist, {
+          type: 'doughnut',
+          data: {
+            labels: ['Real News', 'Fake News'],
+            datasets: [{
+              data: [17056, 17047],
+              backgroundColor: ['#10b981', '#f43f5e'],
+              borderWidth: 0,
+              hoverOffset: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: '#94a3b8', boxWidth: 12 }
+              }
+            }
+          }
+        });
+      }
+
+      // Chart 3: Multi-Metric Radar Chart
+      const ctxRadar = document.getElementById('chart-radar-benchmark');
+      if (ctxRadar) {
+        new Chart(ctxRadar, {
+          type: 'radar',
+          data: {
+            labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'Specificity'],
+            datasets: [
+              {
+                label: 'LinearSVC (Best Model)',
+                data: [98.81, 98.97, 98.65, 98.81, 98.97],
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99, 102, 241, 0.25)',
+                borderWidth: 2,
+                pointBackgroundColor: '#6366f1'
+              },
+              {
+                label: 'Naive Bayes (Baseline)',
+                data: [95.18, 95.19, 95.16, 95.18, 95.19],
+                borderColor: '#94a3b8',
+                backgroundColor: 'rgba(148, 163, 184, 0.15)',
+                borderWidth: 1.5,
+                pointBackgroundColor: '#94a3b8'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                min: 90,
+                max: 100,
+                grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                angleLines: { color: 'rgba(255, 255, 255, 0.08)' },
+                pointLabels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 } },
+                ticks: { backdropColor: 'transparent', color: '#64748b' }
+              }
+            },
+            plugins: {
+              legend: { labels: { color: '#cbd5e1' } }
+            }
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# Environments & Virtual Envs
+venv/
+env/
+ENV/
+.env
+.venv
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Jupyter Notebooks Checkpoints
+.ipynb_checkpoints/
+
+# OS & Editor generated files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
+# System & Tool scratch
+.system_generated/
+
