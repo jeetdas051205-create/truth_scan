@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: truthscan-ai
+    runtime: python
+    plan: free
+    rootDir: CS3244-Fake-News-Detection-master
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
